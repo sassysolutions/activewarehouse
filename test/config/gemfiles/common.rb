@@ -22,7 +22,7 @@ def declare_gems(rails_version)
   
   gem 'awesome_print'
   gem 'rake'
-  gem 'flexmock'
+  gem 'flexdouble'
   gem 'shoulda', '3.0.1'
   gem 'sqlite3'
   gem 'rspec'

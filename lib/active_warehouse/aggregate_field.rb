@@ -3,27 +3,27 @@ module ActiveWarehouse
   # represent columns that should be aggregated.
   class AggregateField < Field
   
-    attr_reader :strategy_name
+    attr_reader :strategy
     
     # +fact_class+ is the class of the fact table this field is found in.
     # +column_definition+ is the ActiveRecord ColumnDefinition instance for this
     # column.
     # +strategy_name+ is the name of th aggregation strategy to be used, defaults to :sum
     # +field_options+ is a hash of raw options from the original aggregate definition.
-    def initialize(fact_class, column_definition, strategy_name = :sum, field_options = {})
-      super(fact_class, column_definition.name, column_definition.type, field_options)
+    def initialize(fact_class, column_definition, options = {})
+      super(fact_class, column_definition.name, column_definition.type, options)
       @column_definition = column_definition
       @limit = column_definition.limit
       @scale = column_definition.scale
       @precision = column_definition.precision
-      @strategy_name = strategy_name
+      @strategy = options[:strategy] || :sum
     end
     
     # delegates to owning_class, returns the Fact that has this field
     def fact_class
       owning_class
     end
-    
+
     # Returns true if the field is semi-additive
     def is_semiadditive?
       !field_options[:semiadditive].nil?
@@ -39,7 +39,7 @@ module ActiveWarehouse
     end
     
     def is_count_distinct?
-      @strategy_name == :count and is_distinct?
+      @strategy == :count and is_distinct?
     end
     
     # returns the Dimension that this semiadditive fact is over
@@ -49,7 +49,11 @@ module ActiveWarehouse
     
     # overrides Field.label, prepending the aggregation strategy name to label
     def label
-      @label ? @label : "#{super}_#{strategy_name}"
+      @label ? @label : "#{super}_#{strategy}"
+    end
+    
+    def strategy_name
+      @strategy
     end
     
     def levels_from_parent

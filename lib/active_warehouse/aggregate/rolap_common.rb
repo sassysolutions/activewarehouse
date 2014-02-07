@@ -72,6 +72,10 @@ module ActiveWarehouse
       def aggregate_fields
         cube_class.aggregate_fields
       end
+
+      def calculated_in_sql_fields
+        cube_class.calculated_in_sql_fields
+      end
       
       # The SQL fragment for tables and joins which is used during the population
       # of the "flattened" cube

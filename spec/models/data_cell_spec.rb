@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe ActiveWarehouse::Report::DataCell, ".new" do
 
 	before(:each) do
-		@fact_attribute = mock('fact_attribute')
+		@fact_attribute = double('fact_attribute')
 		@column_dimension_value = "Something"
 		@row_dimension_value = "2006"
 		@value = "1.1"

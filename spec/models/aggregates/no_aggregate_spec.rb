@@ -80,7 +80,7 @@ describe ActiveWarehouse::Aggregate::NoAggregate do
     # TODO: These are copies of the Cube#query method specs, but this time
     # #query is being call on an Aggregate object. Cube just passes this to
     # an aggregate object, so not only is it not DRY, it's overkill. Should
-    # just use a mock in the Cube spec.
+    # just use a double in the Cube spec.
 
     context "when used to query a cube with typical dimensions" do
       it "returns a value for each aggregate field" do
@@ -528,12 +528,9 @@ describe ActiveWarehouse::Aggregate::NoAggregate do
         values = results.values('Salesperson B', '2006')
         values['Num Sales'].should == 2
 
-        # TODO: Original test asserted zero but error message said result should be 1 and I agree
-        # Why does this fail?
-        
-        # values = results.values('Salesperson C', '2006')
-        # values['Num Sales'].should == 1
-        # 
+        values = results.values('Salesperson C', '2006')
+        values['Num Sales'].should == 1
+
         values = results.values('Salesperson A', '2007')
         values.length.should == 2
         values['Num Sales'].should == 3
@@ -541,17 +538,11 @@ describe ActiveWarehouse::Aggregate::NoAggregate do
         values = results.values('Salesperson B', '2007')
         values['Num Sales'].should == 0
         
-        # TODO: Original test asserted 0 but error message said result should be 1 and I agree
-        # Why does this fail (with a 2)?
-    ##### is it the "latest version? thing"
-        # values = results.values('Salesperson C', '2007')
-        # values['Num Sales'].should == 1
+        values = results.values('Salesperson C', '2007')
+        values['Num Sales'].should == 1
 
-        # TODO: Original test asserted 0 but error message said result should be 2 and I agree
-        # Why does this fail?
-    ##### is it the "latest version? thing"
-        # values = results.values('Salesperson D', '2007')
-        # values['Num Sales'].should == 2
+        values = results.values('Salesperson D', '2007')
+        values['Num Sales'].should == 2
          
         results = agg.query(
           :column_dimension_name => :product, 

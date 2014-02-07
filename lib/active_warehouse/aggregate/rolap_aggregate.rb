@@ -42,6 +42,7 @@ module ActiveWarehouse #:nodoc
         sql += "#{full_column_name} AS #{current_column_name},"
         sql += "#{full_row_name} AS #{current_row_name},"
         sql += aggregate_fields.collect{|c| "#{c.label_for_table} as '#{c.label}'"}.join(",")
+        sql += calculated_in_sql_fields.collect{|c| "#{c.statement} as '#{c.label}'"}.join(",")
         sql += " FROM #{rollup_table_name} "
 
         # build the where clause

@@ -25,7 +25,7 @@ module ActiveWarehouse #:nodoc:
     # :table_alias for a table alias (useful for building queries)
     def initialize(owning_class, name, type, field_options = {})
       @owning_class = owning_class
-      @name = name
+      @name = name.to_s
       @type = type
       @field_options = field_options
 

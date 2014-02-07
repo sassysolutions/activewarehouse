@@ -1,7 +1,10 @@
 module ActiveWarehouse #:nodoc:
   # A field that uses a Proc to calculate the value 
-  class CalculatedField < Field
+  class CalculatedInSqlField < Field
+
     attr_reader :block
+    attr_reader :strategy_name
+
     # Initialize the calculated field
     #
     # +fact_class+ is the fact class that the field is calculated in
@@ -11,18 +14,26 @@ module ActiveWarehouse #:nodoc:
     # 
     # This method accepts a block which should take a single argument that is the record
     # itself.
-    def initialize(fact_class, name, type = :integer, options = {}, &block)
+    def initialize(fact_class, name, options = {}, &block)
       unless block_given?
         raise ArgumentError, "A block is required for the calculated field #{name} in #{fact_class}"
       end
-      type ||= options[:type] || :integer
-      @block = block
+      @strategy_name = options[:strategy] || :sum
+      @type          = options[:type]     || :integer
+      @block         = block
       super(fact_class, name, type, options)
     end
     
-    # Calculate the field value using the Hash of type-casted values
-    def calculate(values)
-      @block.call(values)
+    def statement
+      @block
+    end
+
+    def fact_class
+      owning_class
+    end
+
+    def label
+      @label ? @label : "#{super}_#{strategy_name}"
     end
   end
 end

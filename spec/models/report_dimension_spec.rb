@@ -100,7 +100,7 @@ describe ActiveWarehouse::Report::Dimension, ".ancestors" do
 	
 	before(:each) do
 		@report = stub_report
-		@report.stub!(:column_stage).and_return(nil)
+		@report.stub(:column_stage).and_return(nil)
 	end
 		
   it "should return an array of string values for the current level's parents" do
@@ -116,8 +116,8 @@ describe ActiveWarehouse::Report::Dimension, ".has_children?" do
 	
 	before(:each) do
 		@report = stub_report
-		@report.stub!(:column_stage).and_return(0)
-		@report.stub!(:row_stage).and_return(0)		
+		@report.stub(:column_stage).and_return(0)
+		@report.stub(:row_stage).and_return(0)		
 	end
 		
 	it "should return true when there are hierarchy levels and no stage set" do

@@ -22,7 +22,7 @@ describe ActiveWarehouse::AggregateField do
     context "given a field that is semi-additive" do
       it "returns true" do
         @field = ActiveWarehouse::AggregateField.new(StoreInventorySnapshotFact,
-            StoreInventorySnapshotFact.columns_hash["quantity_sold"], :sum, :semiadditive => :date)
+            StoreInventorySnapshotFact.columns_hash["quantity_sold"], strategy: :sum, semiadditive: :date)
         @field.is_semiadditive?.should be_true
       end
     end
@@ -60,7 +60,7 @@ describe ActiveWarehouse::AggregateField do
   describe "#strategy_name_specified" do
     it "returns the specified strategy name" do
       @field = ActiveWarehouse::AggregateField.new(StoreInventorySnapshotFact,
-          StoreInventorySnapshotFact.columns_hash["quantity_sold"], :count)
+          StoreInventorySnapshotFact.columns_hash["quantity_sold"], strategy: :count)
       @field.strategy_name.should == :count
     end
   end
@@ -74,7 +74,7 @@ describe ActiveWarehouse::AggregateField do
   describe "#label" do
     it "returns the label specified in options" do
         @field = ActiveWarehouse::AggregateField.new(StoreInventorySnapshotFact,
-            StoreInventorySnapshotFact.columns_hash["quantity_sold"], :sum, :label => "My Sum")
+            StoreInventorySnapshotFact.columns_hash["quantity_sold"], strategy: :sum, label: 'My Sum')
         @field.label.should == "My Sum"
     end
   end
@@ -82,7 +82,7 @@ describe ActiveWarehouse::AggregateField do
   describe "#label_for_table" do
     it "returns the label name in downcase-underscore format" do
       @field = ActiveWarehouse::AggregateField.new(StoreInventorySnapshotFact,
-          StoreInventorySnapshotFact.columns_hash["quantity_sold"], :sum, :label => "My Sum")
+          StoreInventorySnapshotFact.columns_hash["quantity_sold"], strategy: :sum, label: 'My Sum')
       @field.label_for_table.should == "my_sum"
     end
   end

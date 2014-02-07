@@ -1,15 +1,17 @@
 module ActiveWarehouse #:nodoc:
   # Class that holds the results of a Cube query
   class CubeQueryResult
-    attr_reader :aggregate_fields_hash
+    attr_reader :fields_hash
 
     # Initialize the aggregate map with an array of AggregateField instances.
     # The AggregateFields are used to typecast the raw values coming from
     # the database.  Thank you very little, DBI.
-    def initialize(aggregate_fields)
-      raise ArgumentError, "aggregate_fields must not be empty" unless aggregate_fields && aggregate_fields.size > 0
-      @aggregate_fields_hash = {}
-      aggregate_fields.each {|c| @aggregate_fields_hash[c.label.to_s] = c}
+    def initialize(aggregate_fields, calculated_in_sql_fields = [])
+      raise ArgumentError, "aggregate_fields must not be empty" \
+        unless aggregate_fields && aggregate_fields.size > 0
+      @fields_hash = {}
+      aggregate_fields.each         {|c| @fields_hash[c.label.to_s] = c}
+      calculated_in_sql_fields.each {|c| @fields_hash[c.label.to_s] = c}
       @values_map = {}
     end
 
@@ -65,7 +67,7 @@ module ActiveWarehouse #:nodoc:
     #       puts "found value: #{column_value}"
     #       # json_data[row_value][column_value] =  {"test" => 1}
     #       aggregate_values = row[column_value]
-    #       json_data[row_value][column_value] =  Hash[aggregate_values.map{|k, v| [aggregate_fields_hash[k].name, v] }]
+    #       json_data[row_value][column_value] =  Hash[aggregate_values.map{|k, v| [fields_hash[k].name, v] }]
     #     end
     #   end
     #   json_data.to_json
@@ -75,14 +77,14 @@ module ActiveWarehouse #:nodoc:
 
     def empty_hash_for_missing_row_or_column
       empty = {}
-      aggregate_fields_hash.keys.each {|k| empty[k] = 0}
+      fields_hash.keys.each {|k| empty[k] = 0}
       empty
     end
 
     def typecast_facts(raw_facts)
 
       raw_facts.each do |k,v|
-        field = aggregate_fields_hash[k.to_s]
+        field = fields_hash[k.to_s]
         if field.nil?
           raise ArgumentError, "'#{k}' is an unknown aggregate field in this query result"
         end

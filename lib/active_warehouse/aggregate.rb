@@ -72,10 +72,10 @@ module ActiveWarehouse #:nodoc:
   end
 end
 
+require 'active_warehouse/aggregate/rolap_common'
 require 'active_warehouse/aggregate/no_aggregate'
 require 'active_warehouse/aggregate/dwarf_common'
 require 'active_warehouse/aggregate/dwarf_aggregate'
 require 'active_warehouse/aggregate/pid_aggregate'
-require 'active_warehouse/aggregate/rolap_common'
 require 'active_warehouse/aggregate/rolap_aggregate'
 require 'active_warehouse/aggregate/pipelined_rolap_aggregate'

@@ -149,7 +149,7 @@ describe ActiveWarehouse::View::TableView, ".current_params" do
   end
 
   it "should contain the report.html_params" do
-    @report.stub!(:html_params).and_return({"some_param" => "my_value"})		
+    @report.stub(:html_params).and_return({"some_param" => "my_value"})		
     @table_view = ActiveWarehouse::View::TableView.new(@report, @params)		
 
     @table_view.current_params.should have_key("some_param")
@@ -264,7 +264,7 @@ describe ActiveWarehouse::View::TableView, ".data_columns" do
     @params = {"r_year" => "2006", "r_month" => "Jan", :rstage => "2",
       "c_year" => "2007", :cstage => "1"}
     @table_view = ActiveWarehouse::View::TableView.new(@report, @params)
-    @table_view.column_dimension.stub!(:values).and_return(["2006","2007"])	
+    @table_view.column_dimension.stub(:values).and_return(["2006","2007"])	
     @data_columns = @table_view.data_columns
   end
 
@@ -285,8 +285,8 @@ describe ActiveWarehouse::View::TableView, ".data_rows" do
     @params = {"r_year" => "2006", "r_month" => "Jan", :rstage => "2",
       "c_year" => "2007", :cstage => "1"}
     @table_view = ActiveWarehouse::View::TableView.new(@report, @params)
-    @table_view.column_dimension.stub!(:values).and_return(["2006","2007"])	
-    @table_view.row_dimension.stub!(:values).and_return(["2006","2007"])	
+    @table_view.column_dimension.stub(:values).and_return(["2006","2007"])	
+    @table_view.row_dimension.stub(:values).and_return(["2006","2007"])	
     @data_rows = @table_view.data_rows
   end
 
@@ -303,13 +303,13 @@ end
 describe ActiveWarehouse::View::TableView, ".data_cell" do
   before(:each) do
     @report = stub_report
-    @report.stub!(:format).and_return({ :field1 => Proc.new {|value| sprintf("$%.2f", value)}})
+    @report.stub(:format).and_return({ :field1 => Proc.new {|value| sprintf("$%.2f", value)}})
     @params = {"r_year" => "2006", "r_month" => "Jan", :rstage => "2",
       "c_year" => "2007", :cstage => "1"}
     @table_view = ActiveWarehouse::View::TableView.new(@report, @params)
-    @table_view.column_dimension.stub!(:values).and_return(["2006","2007"])	
+    @table_view.column_dimension.stub(:values).and_return(["2006","2007"])	
     @data_column = @table_view.data_columns.first
-    ActiveWarehouse::AggregateField.stub!(:===).and_return(true)
+    ActiveWarehouse::AggregateField.stub(:===).and_return(true)
     @table_view.query_result.should_receive(:value).with('row_value', 'column_value', "Field 1").and_return("1.5")		
   end
 
@@ -326,35 +326,35 @@ describe ActiveWarehouse::View::TableView, ".column_total" do
 
   before(:each) do
     @report = stub_report
-    @report.stub!(:format).and_return({ :field1 => Proc.new {|value| sprintf("$%.2f", value)}})
+    @report.stub(:format).and_return({ :field1 => Proc.new {|value| sprintf("$%.2f", value)}})
     @table_view = ActiveWarehouse::View::TableView.new(@report, {})
-    @column1 = mock('data_column')
-    @column2 = mock('data_column2')
-    @column3 = mock('data_column3')
-    @column4 = mock('data_column4')
-    @fact_attribute= mock("fact_attribute")
-    @fact_attribute.stub!(:name).and_return("field0")			
-    @text_attribute= mock("text_attribute")
-    @text_attribute.stub!(:name).and_return("field3")		
-    @column1.stub!(:fact_attribute).and_return(@fact_attribute)
-    @column2.stub!(:fact_attribute).and_return(@field1)		
-    @column3.stub!(:fact_attribute).and_return(@fact_attribute)
-    @column4.stub!(:fact_attribute).and_return(@text_attribute)
-    @cell1 = mock('data_cell')
-    @cell1.stub!(:raw_value).and_return(4)
-    @cell2 = mock('data_cell2')
-    @cell2.stub!(:raw_value).and_return(1.5)
-    @cell3 = mock('data_cell3')
-    @cell3.stub!(:raw_value).and_return("No Sum")
-    @cell4 = mock('data_cell4')
-    @cell4.stub!(:raw_value).and_return(10.5)	
-    @row = mock('data_row')
-    @row.stub!(:cells).and_return([@cell1,@cell2,@cell3,@cell4])
+    @column1 = double('data_column')
+    @column2 = double('data_column2')
+    @column3 = double('data_column3')
+    @column4 = double('data_column4')
+    @fact_attribute= double("fact_attribute")
+    @fact_attribute.stub(:name).and_return("field0")			
+    @text_attribute= double("text_attribute")
+    @text_attribute.stub(:name).and_return("field3")		
+    @column1.stub(:fact_attribute).and_return(@fact_attribute)
+    @column2.stub(:fact_attribute).and_return(@field1)		
+    @column3.stub(:fact_attribute).and_return(@fact_attribute)
+    @column4.stub(:fact_attribute).and_return(@text_attribute)
+    @cell1 = double('data_cell')
+    @cell1.stub(:raw_value).and_return(4)
+    @cell2 = double('data_cell2')
+    @cell2.stub(:raw_value).and_return(1.5)
+    @cell3 = double('data_cell3')
+    @cell3.stub(:raw_value).and_return("No Sum")
+    @cell4 = double('data_cell4')
+    @cell4.stub(:raw_value).and_return(10.5)	
+    @row = double('data_row')
+    @row.stub(:cells).and_return([@cell1,@cell2,@cell3,@cell4])
 
-    @table_view.stub!(:ignore_columns).and_return([:field3])
+    @table_view.stub(:ignore_columns).and_return([:field3])
 
-    @table_view.stub!(:data_columns).and_return([@column1, @column2, @column3, @column4])	
-    @table_view.stub!(:data_rows).and_return([@row,@row])	
+    @table_view.stub(:data_columns).and_return([@column1, @column2, @column3, @column4])	
+    @table_view.stub(:data_rows).and_return([@row,@row])	
   end
 
   it "should return a grand total for the specified column" do
@@ -444,12 +444,12 @@ describe ActiveWarehouse::View::TableView, ".format_data" do
 
   before(:each) do
     @report = stub_report
-    @report.stub!(:format).and_return({:field1 => :ignore, :field2 => Proc.new {|f| "$#{f}"}})
+    @report.stub(:format).and_return({:field1 => :ignore, :field2 => Proc.new {|f| "$#{f}"}})
     @table_view = ActiveWarehouse::View::TableView.new(@report, {})
   end
 
   it "should return convert :currency to $0.00 format" do 
-    @report.stub!(:format).and_return({:field1 => :ignore, :field2 => :currency})
+    @report.stub(:format).and_return({:field1 => :ignore, :field2 => :currency})
     @table_view = ActiveWarehouse::View::TableView.new(@report, {})	
     @table_view.format_data(:field2, 0.01).should eql("$0.01")
   end
@@ -464,35 +464,35 @@ describe ActiveWarehouse::View::TableView, ".format_data" do
 end
 
 def stub_report
-  @report = mock('report')
-  @cube = mock('cube')
-  query_result = mock('query_result')
-  @cube.stub!(:query_row_and_column).and_return(query_result)
+  @report = double('report')
+  @cube = double('cube')
+  query_result = double('query_result')
+  @cube.stub(:query_row_and_column).and_return(query_result)
   eval("class CustomerFact < ActiveWarehouse::Fact;  end")
   eval("class EventDateDimension < ActiveWarehouse::Dimension; define_hierarchy :year_hierarchy, [:year, :month, :day]; end")
 
-  @field1 = mock('field1')
-  @field1.stub!(:label).and_return("Field 1")
-  @field1.stub!(:name).and_return("field1")
-  CustomerFact.stub!(:field_for_name).and_return(@field1)
-  @report.stub!(:fact_class).and_return(CustomerFact)
-  @report.stub!(:fact_attributes).and_return([:field1,:field2])
+  @field1 = double('field1')
+  @field1.stub(:label).and_return("Field 1")
+  @field1.stub(:name).and_return("field1")
+  CustomerFact.stub(:field_for_name).and_return(@field1)
+  @report.stub(:fact_class).and_return(CustomerFact)
+  @report.stub(:fact_attributes).and_return([:field1,:field2])
 
-  @report.stub!(:cube).and_return(@cube)
-  @report.stub!(:conditions).and_return({})
-  @report.stub!(:column_dimension_class).and_return(EventDateDimension)
-  @report.stub!(:column_dimension_name).and_return("event_date_dimension")
-  @report.stub!(:column_hierarchy).and_return(:year_hierarchy)
-  @report.stub!(:column_stage).and_return(1)
-  @report.stub!(:column_filters).and_return({})
-  @report.stub!(:column_param_prefix).and_return('c')
-  @report.stub!(:format).and_return({})
-  @report.stub!(:html_params).and_return({})			
-  @report.stub!(:row_dimension_class).and_return(EventDateDimension)
-  @report.stub!(:row_dimension_name).and_return("event_date_dimension")
-  @report.stub!(:row_hierarchy).and_return(:year_hierarchy)
-  @report.stub!(:row_stage).and_return(1)
-  @report.stub!(:row_filters).and_return({})
-  @report.stub!(:row_param_prefix).and_return('r')	
+  @report.stub(:cube).and_return(@cube)
+  @report.stub(:conditions).and_return({})
+  @report.stub(:column_dimension_class).and_return(EventDateDimension)
+  @report.stub(:column_dimension_name).and_return("event_date_dimension")
+  @report.stub(:column_hierarchy).and_return(:year_hierarchy)
+  @report.stub(:column_stage).and_return(1)
+  @report.stub(:column_filters).and_return({})
+  @report.stub(:column_param_prefix).and_return('c')
+  @report.stub(:format).and_return({})
+  @report.stub(:html_params).and_return({})			
+  @report.stub(:row_dimension_class).and_return(EventDateDimension)
+  @report.stub(:row_dimension_name).and_return("event_date_dimension")
+  @report.stub(:row_hierarchy).and_return(:year_hierarchy)
+  @report.stub(:row_stage).and_return(1)
+  @report.stub(:row_filters).and_return({})
+  @report.stub(:row_param_prefix).and_return('r')	
   @report
 end

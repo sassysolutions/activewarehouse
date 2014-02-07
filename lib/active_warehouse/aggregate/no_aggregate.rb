@@ -4,6 +4,7 @@ module ActiveWarehouse #:nodoc:
   module Aggregate #:nodoc:
     # An aggregate which goes directly to the fact and dimensions to answer questions
     class NoAggregate < Aggregate
+      include RolapCommon
 
       # Populate the aggregate (in this case it is a no-op implementation)
       def populate(options={})
@@ -108,6 +109,13 @@ module ActiveWarehouse #:nodoc:
           agg_sql
         }.join(",\n")
 
+        calculated_in_sql_columns = calculated_in_sql_fields.collect { |c|
+          quoted_label = cube_class.connection.quote_column_name(c.label)
+          sql = ''
+          sql += "  #{c.strategy_name}(#{c.statement.call(c.from_table_name)}) AS #{quoted_label}"
+          sql
+        }.join(",\n")
+
         current_column_name = [current_column_name] unless current_column_name.is_a? Array
         current_row_name    = [current_row_name]    unless current_row_name.is_a? Array
 
@@ -123,6 +131,7 @@ module ActiveWarehouse #:nodoc:
         sql += "SELECT\n"
         sql += "  #{(column_dimension_columns + row_dimension_columns).join(", \n  ")},\n"
         sql += fact_columns
+        sql += ",\n" + calculated_in_sql_columns if calculated_in_sql_columns.present?
         sql += "\nFROM\n"
 
         sql += "  #{fact_class.table_name}"
@@ -219,7 +228,8 @@ module ActiveWarehouse #:nodoc:
           sql
         else
           result = ActiveWarehouse::CubeQueryResult.new(
-            cube_class.aggregate_fields(used_dimensions)
+            cube_class.aggregate_fields(used_dimensions),
+            cube_class.calculated_in_sql_fields
           )
 
 

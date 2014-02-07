@@ -70,15 +70,23 @@ describe ActiveWarehouse::Field do
   describe "#field_options" do
     it "returns the fields options hash" do
       @field = ActiveWarehouse::AggregateField.new(StoreInventorySnapshotFact,
-          StoreInventorySnapshotFact.columns_hash["quantity_sold"], :sum, :label => 'My Field')
-      @field.field_options.should == {:label=> 'My Field'}
+          StoreInventorySnapshotFact.columns_hash["quantity_sold"], strategy: :sum, label: 'My Field')
+      @field.field_options.should == {strategy: :sum, label: 'My Field'}
     end
   end
   
+  describe "#strategy" do
+    it "returns the value of the strategy option" do
+      @field = ActiveWarehouse::AggregateField.new(StoreInventorySnapshotFact,
+        StoreInventorySnapshotFact.columns_hash["quantity_sold"], strategy: :sum, label: 'My Field')
+      @field.strategy.should == :sum
+    end
+  end
+
   describe "#label" do
     it "returns the value of the label option" do
       @field = ActiveWarehouse::AggregateField.new(StoreInventorySnapshotFact,
-        StoreInventorySnapshotFact.columns_hash["quantity_sold"], :sum, :label => 'My Field')
+        StoreInventorySnapshotFact.columns_hash["quantity_sold"], strategy: :sum, label: 'My Field')
       @field.label.should == 'My Field'
     end
   end
@@ -92,7 +100,7 @@ describe ActiveWarehouse::Field do
   describe "#label_for_table" do
     it "returns the value of the label option in downcase/underscore format" do
       @field = ActiveWarehouse::AggregateField.new(StoreInventorySnapshotFact,
-        StoreInventorySnapshotFact.columns_hash["quantity_sold"], :sum, :label => "My Sum")
+        StoreInventorySnapshotFact.columns_hash["quantity_sold"], strategy: :sum, label: 'My Sum')
       @field.label_for_table.should == "my_sum"
     end
   end

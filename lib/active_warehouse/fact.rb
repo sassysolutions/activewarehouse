@@ -20,6 +20,9 @@ module ActiveWarehouse #:nodoc
       # and the value is the Hash of options for that calculated field.
       attr_accessor :calculated_field_options
 
+      # Array of field_names being calculated in sql
+      attr_accessor :calculated_in_sql_fields
+
       # Array of belongs_to +Reflection+ instances that represent the
       # dimensions for this fact.
       attr_accessor :dimension_relationships
@@ -148,10 +151,12 @@ module ActiveWarehouse #:nodoc
         if columns_hash[field.to_s].nil?
           raise ArgumentError, "Field #{field} does not exist in table #{table_name}"
         end
-        options[:type] ||= :sum
 
-        aggregate_field = AggregateField.new(self, columns_hash[field.to_s],
-                                             options[:type], options)
+        # :type is the old one, but let's be backward-compatible
+        options[:strategy] ||= options[:type] || :sum
+        options.delete(:type)
+
+        aggregate_field = AggregateField.new(self, columns_hash[field.to_s], options)
         aggregate_fields << aggregate_field
       rescue Object=>err
         raise if err.is_a?(ArgumentError) || err.is_a?(ActiveRecord::ConnectionNotEstablished)
@@ -176,7 +181,11 @@ module ActiveWarehouse #:nodoc
       #
       # Example: calculated_field (:gross_margin) { |r| r.gross_profit_dollar_amount / r.sales_dollar_amount}
       def calculated_field(field, options={}, &block)
-        calculated_fields << CalculatedField.new(self, field, options[:type], options, &block)
+        calculated_fields << CalculatedField.new(self, field, options, &block)
+      end
+
+      def calculated_in_sql_field(field, options={}, &block)
+        calculated_in_sql_fields << CalculatedInSqlField.new(self, field, options, &block)
       end
 
       # Returns true if this fact has at least one fact that is semiadditive,
@@ -196,6 +205,10 @@ module ActiveWarehouse #:nodoc
       # Get the CalculatedField instance for the specified name
       def calculated_field_for_name(name)
         calculated_fields.find {|f| f.name.to_s == name.to_s}
+      end
+
+      def calculated_in_sql_fields
+        @calculated_in_sql_field ||= []
       end
 
       # Get a list of all aggregate fields
