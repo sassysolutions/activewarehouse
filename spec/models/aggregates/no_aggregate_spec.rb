@@ -84,8 +84,8 @@ describe ActiveWarehouse::Aggregate::NoAggregate do
 
     context "when used to query a cube with typical dimensions" do
       it "returns a value for each aggregate field" do
-        @values_2001.should have(6).items
-        @values_2002.should have(6).items
+        @values_2001.should have(7).items
+        @values_2002.should have(7).items
       end
 
       it "returns correct results for a cube cell with one record" do
@@ -108,11 +108,12 @@ describe ActiveWarehouse::Aggregate::NoAggregate do
 
       it "returns hash of zeroes for values in cell for which there are no facts" do
         @values_2003.should == {'Sum of Sales Quantity' => 0,
-                                 'Sum of Sales Amount' => 0,
-                                 'Sum of Cost' => 0,
-                                 'Sum of Gross Profit' => 0,
-                                 'Sales Quantity Count' => 0,
-                                 'Avg Sales Amount' => 0}
+                                'Sum of Sales Amount' => 0,
+                                'Sum of Cost' => 0,
+                                'Sum of Gross Profit' => 0,
+                                'Sales Quantity Count' => 0,
+                                'Avg Sales Amount' => 0,
+                                'pos_retail_sales_transaction_facts_gross_margin_sql_sum' => 0}
       end
 
       it "returns correct results when passed parameters as a simple array" do
@@ -122,8 +123,8 @@ describe ActiveWarehouse::Aggregate::NoAggregate do
         @values_2002 = this_result.values('Southeast', '2002')
         @values_2003 = this_result.values('Southeast', '2003')
 
-        @values_2001.should have(6).items
-        @values_2002.should have(6).items
+        @values_2001.should have(7).items
+        @values_2002.should have(7).items
 
         @values_2001['Sum of Sales Quantity'].should == 1
         @values_2001['Sum of Sales Amount'].should be_within(0.01).of(1.75)
@@ -140,11 +141,12 @@ describe ActiveWarehouse::Aggregate::NoAggregate do
         @values_2002['Avg Sales Amount'].should be_within(0.01).of(2.75)
         
         @values_2003.should == {'Sum of Sales Quantity' => 0,
-                                 'Sum of Sales Amount' => 0,
-                                 'Sum of Cost' => 0,
-                                 'Sum of Gross Profit' => 0,
-                                 'Sales Quantity Count' => 0,
-                                 'Avg Sales Amount' => 0}
+                                'Sum of Sales Amount' => 0,
+                                'Sum of Cost' => 0,
+                                'Sum of Gross Profit' => 0,
+                                'Sales Quantity Count' => 0,
+                                'Avg Sales Amount' => 0,
+                                'pos_retail_sales_transaction_facts_gross_margin_sql_sum' => 0}
       end
     end
 
@@ -181,11 +183,12 @@ describe ActiveWarehouse::Aggregate::NoAggregate do
         @values_monday['Avg Sales Amount'].should be_within(0.01).of(1.75)    
 
         @values_tuesday.should == {'Sum of Sales Quantity' => 0,
-                                 'Sum of Sales Amount' => 0,
-                                 'Sum of Cost' => 0,
-                                 'Sum of Gross Profit' => 0,
-                                 'Sales Quantity Count' => 0,
-                                 'Avg Sales Amount' => 0}
+                                   'Sum of Sales Amount' => 0,
+                                   'Sum of Cost' => 0,
+                                   'Sum of Gross Profit' => 0,
+                                   'Sales Quantity Count' => 0,
+                                   'Avg Sales Amount' => 0,
+                                   'pos_retail_sales_transaction_facts_gross_margin_sql_sum' => 0}
 
         filters = {'date.calendar_year' => '2001', 'store.store_region' => 'Southeast'}
 
@@ -247,7 +250,7 @@ describe ActiveWarehouse::Aggregate::NoAggregate do
         )
 
         values = results.values('Bob Smith', '2001')
-        values.length.should == 8
+        values.length.should == 9
         values['Sum of Sales Quantity'].should == 1
         values['Sum of Sales Quantity Self'].should == 1
         values['Sum of Sales Quantity Me and Immediate children'].should == 1
@@ -272,7 +275,7 @@ describe ActiveWarehouse::Aggregate::NoAggregate do
         )
 
         values = results.values('Bob Smith', '2002')
-        values.length.should == 8
+        values.length.should == 9
         values['Sum of Sales Quantity'].should == 6 #TODO: check to confirm that this result should roll up all children.
         values['Sum of Sales Quantity Self'].should == 2
         values['Sum of Sales Quantity Me and Immediate children'].should == 4

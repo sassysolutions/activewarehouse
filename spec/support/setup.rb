@@ -71,6 +71,8 @@ def model_pos_retail_sales_transaction_fact
 
   PosRetailSalesTransactionFact.calculated_field (:gross_margin) { |r| r.gross_profit_dollar_amount / r.sales_dollar_amount}
 
+  PosRetailSalesTransactionFact.calculated_in_sql_field (:gross_margin_sql) { |r| "#{r}.gross_profit_dollar_amount / #{r}.sales_dollar_amount"}
+
   PosRetailSalesTransactionFact.dimension :date
   PosRetailSalesTransactionFact.dimension :store
   PosRetailSalesTransactionFact.dimension :product
