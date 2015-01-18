@@ -31,11 +31,11 @@ module ActiveWarehouse #:nodoc
       # as a dimension.  You must call +dimension+ instead of +belongs_to+.
       # Accepts same options as +belongs_to+.
       def dimension(association_id, options = {})
-        options[:class_name] ||= "#{association_id}Dimension".classify
+        options[:class_name] ||= "#{association_id}_dimension".classify
         options[:foreign_key] ||= "#{association_id}_id"
         slowly_changing_over = options.delete(:slowly_changing)
         belongs_to association_id, options
-        relationship = reflections[association_id]
+        relationship = reflections[association_id.to_s]
 
         if slowly_changing_over
           if !dimensions.include?(slowly_changing_over)
@@ -52,12 +52,12 @@ module ActiveWarehouse #:nodoc
       # instead of +has_and_belongs_to_many+.
       # Accepts same options as +has_and_belongs_to_many+.
       def has_and_belongs_to_many_dimension(association_id, options = {})
-        options[:class_name] ||= "#{association_id}Dimension".classify
+        options[:class_name] ||= "#{association_id}_dimension".classify
         options[:association_foreign_key] ||= "#{association_id}_id"
         name = self.name.demodulize.chomp('Fact').underscore
         options[:join_table] ||= "#{name}_#{association_id}_bridge"
         has_and_belongs_to_many association_id, options
-        relationship = reflections[association_id]
+        relationship = reflections[association_id.to_s]
         dimension_relationships[association_id] = relationship
       end
 
@@ -106,7 +106,7 @@ module ActiveWarehouse #:nodoc
       # Returns the dimension class, given a dimension name from this fact.
       # Must appear as a registered dimension relationship.
       def dimension_class(dimension_name)
-        dimension_relationships[dimension_name.to_sym].class_name.constantize
+        dimension_relationships[dimension_name].class_name.constantize
       end
 
       # Get the time when the fact source file was last modified

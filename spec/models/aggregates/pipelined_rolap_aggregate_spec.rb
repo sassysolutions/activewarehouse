@@ -16,7 +16,7 @@ describe ActiveWarehouse::Aggregate::PipelinedRolapAggregate do
   
   describe "#initialize" do
     it "returns something" do
-      RollupSalesTransactionsCube.aggregate.should be_true
+      expect(RollupSalesTransactionsCube.aggregate).not_to be_blank
     end
   end
 
@@ -31,7 +31,7 @@ describe ActiveWarehouse::Aggregate::PipelinedRolapAggregate do
     it "returns something, and here's some output above" do
       sql = @aggregate.aggregated_fact_column_sql
       puts sql
-      sql.should be_true
+      expect(sql).not_to be_blank
     end
   end
   
@@ -39,7 +39,7 @@ describe ActiveWarehouse::Aggregate::PipelinedRolapAggregate do
     it "returns something, and here's some output above" do
       sql = @aggregate.tables_and_joins
       puts sql
-      sql.should be_true
+      expect(sql).not_to be_blank
     end
   end  
   

@@ -8,10 +8,10 @@ describe ActiveWarehouse::Report::DataRow, ".new" do
 	end
 
 	it "should have a row dimension value" do
-		@row.dimension_value.should == 'my_value'
+		@row.dimension_value.should eq('my_value')
 	end
 
 	it "should start with an empty cell array" do
-	  @row.cells.should have(0).items
+	  expect(@row.cells.count).to eq(0)
 	end
 end

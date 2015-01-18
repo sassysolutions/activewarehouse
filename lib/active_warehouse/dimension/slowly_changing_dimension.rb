@@ -46,13 +46,13 @@ module ActiveWarehouse #:nodoc:
           self.effective_date_attribute = options[:effective_date_attribute] || :effective_date
           self.expiration_date_attribute = options[:expiration_date_attribute] || :expiration_date
 
-          default_scope :conditions =>{self.latest_version_attribute => true}
+          default_scope { where(self.latest_version_attribute => true) }
           
-          scope :valid_on, lambda { |valid_on|
+          scope :valid_on, ->(valid_on) {
             where("? between #{effective_date_attribute} and #{expiration_date_attribute}", valid_on)
           }
 
-          scope :valid_during, lambda { |valid_during|
+          scope :valid_during, ->(valid_during) {
             where("(? between #{effective_date_attribute} and #{expiration_date_attribute})" +
                   " or (#{effective_date_attribute} between ? and ?)",
                   valid_during.first, valid_during.first, valid_during.last)
@@ -80,7 +80,7 @@ module ActiveWarehouse #:nodoc:
       def versions
         self.class.where("#{self.class.identifier} = ?", self.send(identifier))
                   .order("#{self.class.effective_date_attribute} asc")
-                      # :with_older => true,
+                  .unscoped
       end
 
       module ClassMethods

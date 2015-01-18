@@ -89,11 +89,11 @@ describe ActiveWarehouse::Fact do
   
   describe "#aggregate_fields" do    
     it "returns all the fields" do
-      PosRetailSalesTransactionFact.aggregate_fields.should have(8).items
+      expect(PosRetailSalesTransactionFact.aggregate_fields.count).to eq(8)
     end
     
     it "includes the fields specified" do
-      PosRetailSalesTransactionFact.aggregate_fields.find {|f| f.name == "sales_quantity"}.should be_true
+      PosRetailSalesTransactionFact.aggregate_fields.select{|f| f.name == "sales_quantity"}.should_not be_nil
     end
   end
   
@@ -105,11 +105,11 @@ describe ActiveWarehouse::Fact do
   
   describe "#has_semiadditive_fact?" do
     it "returns false when the fact table doesn't have semi-additive facts" do
-      PosRetailSalesTransactionFact.has_semiadditive_fact?.should be_false
+      PosRetailSalesTransactionFact.has_semiadditive_fact?.should be false
     end
     
     it "returns true when the fact table has semi-additive facts" do
-      StoreInventorySnapshotFact.has_semiadditive_fact?.should be_true
+      StoreInventorySnapshotFact.has_semiadditive_fact?.should be true
     end
   end
   
@@ -136,7 +136,7 @@ describe ActiveWarehouse::Fact do
     end
     
     it "includes all the prejoined fields" do
-      PosRetailSalesTransactionFact.prejoined_fields.should have(2).items
+      expect(PosRetailSalesTransactionFact.prejoined_fields.count).to eq(2)
     end
   end
   
@@ -166,13 +166,13 @@ describe ActiveWarehouse::Fact do
   
   describe "#belongs_to_relationship?" do                      
     it "returns true if the fact belongs_to the given dimension" do
-      DailySalesFact.belongs_to_relationship?(:date).should be_true
+      expect(DailySalesFact.belongs_to_relationship?(:date)).to be true
     end
   end
   
   describe "#has_and_belongs_to_many_relationship?" do                      
     it "returns true if the fact has_many of and belongs_to the given dimension" do
-      DailySalesFact.has_and_belongs_to_many_relationship?(:product).should be_true
+      expect(DailySalesFact.has_and_belongs_to_many_relationship?(:product)).to be true
     end
   end
   

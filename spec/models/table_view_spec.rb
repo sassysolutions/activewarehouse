@@ -26,17 +26,17 @@ describe ActiveWarehouse::View::TableView, ".new" do
   end
 
   it "should set an array of fact attributes" do
-    @table_view.fact_attributes.should have(2).items
+    expect(@table_view.fact_attributes.count).to be == 2
     @table_view.fact_attributes[0].label.should == "Field 1"
   end
 
   it "should not set any options by default" do
-    @table_view.with_totals.should be_false
+    expect(@table_view.with_totals).to be false
   end
 
   it "should accept an option of with_totals" do
     @view = ActiveWarehouse::View::TableView.new(@report, @params, :with_totals => true)
-    @view.with_totals.should be_true
+    expect(@view.with_totals).to be true
   end	
 end
 
@@ -50,7 +50,7 @@ describe ActiveWarehouse::View::TableView, ".parse for column" do
   end
 
   it "should parse params for the column dimension" do
-    @column_params.should have(2).items
+    expect(@column_params.count).to eq(2)
     @column_params.should include(:stage)
     @column_params.should include(:ancestors)
   end
@@ -60,7 +60,7 @@ describe ActiveWarehouse::View::TableView, ".parse for column" do
   end
 
   it "should determine the ancestors from the params" do
-    @column_params[:ancestors].should have(2).items	  
+    expect(@column_params[:ancestors].count).to be == 2
     @column_params[:ancestors].should have_key("year")
     @column_params[:ancestors]["year"].should == "2006"
     @column_params[:ancestors].should have_key("month")
@@ -77,7 +77,7 @@ describe ActiveWarehouse::View::TableView, ".parse for column" do
   it "should pass an empty ancestors hash when no ancestor values are found" do
     @table_view = ActiveWarehouse::View::TableView.new(@report, {})
     @column_params = @table_view.parse({},:cstage,"c")
-    @column_params[:ancestors].should have(0).items	  
+    expect(@column_params[:ancestors].count).to be == 0
   end
 end
 
@@ -91,7 +91,7 @@ describe ActiveWarehouse::View::TableView, ".parse_params for row" do
   end
 
   it "should parse params for the row dimension" do
-    @row_params.should have(2).items
+    expect(@row_params.count).to be == 2
     @row_params.should include(:stage)
     @row_params.should include(:ancestors)
   end
@@ -101,7 +101,7 @@ describe ActiveWarehouse::View::TableView, ".parse_params for row" do
   end
 
   it "should determine the ancestors from the params" do
-    @row_params[:ancestors].should have(2).items	  
+    expect(@row_params[:ancestors].count).to be == 2
     @row_params[:ancestors].should have_key("year")
     @row_params[:ancestors]["year"].should == "2006"
     @row_params[:ancestors].should have_key("month")
@@ -269,7 +269,7 @@ describe ActiveWarehouse::View::TableView, ".data_columns" do
   end
 
   it "should return an array of DataColumns" do
-    @data_columns.should have(4).items
+    expect(@data_columns.count).to be == 4
   end
 
   it "should return valid DataColumns with fact attributes and dimension values" do
@@ -291,11 +291,11 @@ describe ActiveWarehouse::View::TableView, ".data_rows" do
   end
 
   it "should return an array of DataRows" do
-    @data_rows.should have(2).items
+    expect(@data_rows.count).to be == 2
   end
 
   it "should return valid DataRows with cells and dimension values" do
-    @data_rows.first.cells.should have(4).items
+    expect(@data_rows.first.cells.count).to be == 4
     @data_rows.first.dimension_value.should == "2006"
   end
 end
@@ -381,7 +381,7 @@ describe ActiveWarehouse::View::TableView, ".row_crumbs" do
   end
 
   it "should return the three crumbs" do
-    @table_view.row_crumbs.should have(3).items
+    expect(@table_view.row_crumbs.count).to be == 3
   end
 
   it "should return crumbs with increasing rstage link params" do
@@ -418,7 +418,7 @@ describe ActiveWarehouse::View::TableView, ".column_crumbs" do
   end
 
   it "should return two crumbs" do
-    @table_view.column_crumbs.should have(2).items
+    expect(@table_view.column_crumbs.count).to be == 2
   end
 
   it "should return crumbs with increasing cstage link params" do

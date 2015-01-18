@@ -31,21 +31,21 @@ describe ActiveWarehouse::Report::TableReport, ".view" do
     view = @report.view(@params, :with_totals => true)
 
     view.current_params[:cstage].should == 1
-    view.with_totals?.should be_true
+    view.with_totals?.should be true
   end
 
   it "should accept a sortable option" do
     @params = {}
     view = @report.view(@params, :sortable => true)
 
-    view.sortable?.should be_true
+    view.sortable?.should be true
   end
 
   it "should accept a sortable_with_totals convenience option" do
     @params = {}
     view = @report.view(@params, :sortable_with_totals => true)
 
-    view.sortable?.should be_true
-    view.with_totals?.should be_true
+    view.sortable?.should be true
+    view.with_totals?.should be true
   end
 end

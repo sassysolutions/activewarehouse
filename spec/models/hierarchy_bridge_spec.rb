@@ -62,7 +62,7 @@ describe ActiveWarehouse::HierarchyBridge do
   
   describe "#top_flag_value" do
     it "returns true by default" do
-      ActiveWarehouse::HierarchyBridge.top_flag_value.should be_true
+      ActiveWarehouse::HierarchyBridge.top_flag_value.should be true
     end
   end
   

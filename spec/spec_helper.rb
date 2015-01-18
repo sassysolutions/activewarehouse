@@ -27,7 +27,7 @@ else
   raise "database in #{db} environment not created."
 end
 
-ActiveRecord::Base.establish_connection(db)
+ActiveRecord::Base.establish_connection(db.to_sym)
 
 # TODO: figure out why setting tz to UTC breaks one of the SCD specs.
 ActiveRecord::Base.default_timezone = :utc
@@ -42,6 +42,16 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = :truncation
     set_up_classes
     FactoryGirl.reload # Don't think FactoryGirl can register factories for classes until classes exist
+  end
+
+  # enable deprecated "should syntax"
+  config.expect_with :rspec do |c|
+    c.syntax = [:should, :expect]
+  end
+
+  # and this is required for "obj.stub(...)"
+  config.mock_with :rspec do |mocks|
+    mocks.syntax = [:should, :expect]
   end
   
 end

@@ -35,7 +35,7 @@ module ActiveWarehouse #:nodoc
               options[:class_name] ||= name.gsub(/Dimension$/, 'HierarchyBridge')
               options[:foreign_key] ||= "parent_id"
               has_many association_id, options
-              @child_hierarchy_relationship = reflections[association_id]
+              @child_hierarchy_relationship = reflections[association_id.to_s]
             end
 
             # Define the parent relationship on the bridge table to the dimension
@@ -44,7 +44,7 @@ module ActiveWarehouse #:nodoc
               options[:class_name] ||= name.gsub(/Dimension$/, 'HierarchyBridge')
               options[:foreign_key] ||= "child_id"
               has_many association_id, options
-              @parent_hierarchy_relationship = reflections[association_id]
+              @parent_hierarchy_relationship = reflections[association_id.to_s]
             end
 
             # the foreign key column name on the bridge table for finding the
@@ -80,16 +80,17 @@ module ActiveWarehouse #:nodoc
     module InstanceMethods #:nodoc
       # Get the parent for this node
       def parent
-        self.class.first(:select => "a.*",
-                         :joins => "a join #{self.class.bridge_class.table_name} b on a.id = b.#{self.class.child_foreign_key}",
-        :conditions => ["b.#{self.class.parent_foreign_key} = ? and b.#{self.class.levels_from_parent} = 1", self.id])
+        self.class.select("a.*")
+                  .joins("a join #{self.class.bridge_class.table_name} b on a.id = b.#{self.class.child_foreign_key}")
+                  .where("b.#{self.class.parent_foreign_key} = ? and b.#{self.class.levels_from_parent} = 1", self.id)
+                  .take # = limit 1
       end
 
       # Get the children for this node
       def children
-        self.class.all(:select => "a.*",
-                       :joins => "a join #{self.class.bridge_class.table_name} b on a.id = b.#{self.class.parent_foreign_key}",
-        :conditions => ["b.#{self.class.child_foreign_key} = ? and b.#{self.class.levels_from_parent} = 1", self.id])
+        self.class.select("a.*")
+                  .joins("a join #{self.class.bridge_class.table_name} b on a.id = b.#{self.class.parent_foreign_key}")
+                  .where("b.#{self.class.child_foreign_key} = ? and b.#{self.class.levels_from_parent} = 1", self.id)
       end
     end
 

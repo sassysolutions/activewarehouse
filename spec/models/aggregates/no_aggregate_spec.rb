@@ -84,36 +84,36 @@ describe ActiveWarehouse::Aggregate::NoAggregate do
 
     context "when used to query a cube with typical dimensions" do
       it "returns a value for each aggregate field" do
-        @values_2001.should have(7).items
-        @values_2002.should have(7).items
+        expect(@values_2001.count).to be == 7
+        expect(@values_2002.count).to be == 7
       end
 
       it "returns correct results for a cube cell with one record" do
-        @values_2001['Sum of Sales Quantity'].should == 1
-        @values_2001['Sum of Sales Amount'].should be_within(0.01).of(1.75)
-        @values_2001['Sum of Cost'].should be_within(0.01).of(0.5)
-        @values_2001['Sum of Gross Profit'].should be_within(0.01).of(1.25)
-        @values_2001['Sales Quantity Count'].should == 1
-        @values_2001['Avg Sales Amount'].should be_within(0.01).of(1.75)
+        expect(@values_2001['Sum of Sales Quantity']).to eq(1)
+        expect(@values_2001['Sum of Sales Amount']).to be_within(0.01).of(1.75)
+        expect(@values_2001['Sum of Cost']).to be_within(0.01).of(0.5)
+        expect(@values_2001['Sum of Gross Profit']).to be_within(0.01).of(1.25)
+        expect(@values_2001['Sales Quantity Count']).to eq(1)
+        expect(@values_2001['Avg Sales Amount']).to be_within(0.01).of(1.75)
       end
 
       it "returns correct results for a cube cell with multiple records" do
-        @values_2002['Sum of Sales Quantity'].should == 6
-        @values_2002['Sum of Sales Amount'].should be_within(0.01).of(8.25)
-        @values_2002['Sum of Cost'].should be_within(0.01).of(7.50)
-        @values_2002['Sum of Gross Profit'].should be_within(0.01).of(0.75)
-        @values_2002['Sales Quantity Count'].should == 3
-        @values_2002['Avg Sales Amount'].should be_within(0.01).of(2.75)
+        expect(@values_2002['Sum of Sales Quantity']).to be == 6
+        expect(@values_2002['Sum of Sales Amount']).to be_within(0.01).of(8.25)
+        expect(@values_2002['Sum of Cost']).to be_within(0.01).of(7.50)
+        expect(@values_2002['Sum of Gross Profit']).to be_within(0.01).of(0.75)
+        expect(@values_2002['Sales Quantity Count']).to be == 3
+        expect(@values_2002['Avg Sales Amount']).to be_within(0.01).of(2.75)
       end
 
       it "returns hash of zeroes for values in cell for which there are no facts" do
-        @values_2003.should == {'Sum of Sales Quantity' => 0,
-                                'Sum of Sales Amount' => 0,
-                                'Sum of Cost' => 0,
-                                'Sum of Gross Profit' => 0,
-                                'Sales Quantity Count' => 0,
-                                'Avg Sales Amount' => 0,
-                                'pos_retail_sales_transaction_facts_gross_margin_sql_sum' => 0}
+        expect(@values_2003).to eq({'Sum of Sales Quantity' => 0,
+                                    'Sum of Sales Amount' => 0,
+                                    'Sum of Cost' => 0,
+                                    'Sum of Gross Profit' => 0,
+                                    'Sales Quantity Count' => 0,
+                                    'Avg Sales Amount' => 0,
+                                    'pos_retail_sales_transaction_facts_gross_margin_sql_sum' => 0})
       end
 
       it "returns correct results when passed parameters as a simple array" do
@@ -123,30 +123,30 @@ describe ActiveWarehouse::Aggregate::NoAggregate do
         @values_2002 = this_result.values('Southeast', '2002')
         @values_2003 = this_result.values('Southeast', '2003')
 
-        @values_2001.should have(7).items
-        @values_2002.should have(7).items
+        expect(@values_2001.count).to be == 7
+        expect(@values_2002.count).to be == 7
 
-        @values_2001['Sum of Sales Quantity'].should == 1
+        expect(@values_2001['Sum of Sales Quantity']).to eq(1)
         @values_2001['Sum of Sales Amount'].should be_within(0.01).of(1.75)
         @values_2001['Sum of Cost'].should be_within(0.01).of(0.5)
         @values_2001['Sum of Gross Profit'].should be_within(0.01).of(1.25)
-        @values_2001['Sales Quantity Count'].should == 1
+        expect(@values_2001['Sales Quantity Count']).to eq(1)
         @values_2001['Avg Sales Amount'].should be_within(0.01).of(1.75)
         
-        @values_2002['Sum of Sales Quantity'].should == 6
+        expect(@values_2002['Sum of Sales Quantity']).to eq(6)
         @values_2002['Sum of Sales Amount'].should be_within(0.01).of(8.25)
         @values_2002['Sum of Cost'].should be_within(0.01).of(7.50)
         @values_2002['Sum of Gross Profit'].should be_within(0.01).of(0.75)
-        @values_2002['Sales Quantity Count'].should == 3
+        expect(@values_2002['Sales Quantity Count']).to eq(3)
         @values_2002['Avg Sales Amount'].should be_within(0.01).of(2.75)
         
-        @values_2003.should == {'Sum of Sales Quantity' => 0,
-                                'Sum of Sales Amount' => 0,
-                                'Sum of Cost' => 0,
-                                'Sum of Gross Profit' => 0,
-                                'Sales Quantity Count' => 0,
-                                'Avg Sales Amount' => 0,
-                                'pos_retail_sales_transaction_facts_gross_margin_sql_sum' => 0}
+        expect(@values_2003).to eq({'Sum of Sales Quantity' => 0,
+                                    'Sum of Sales Amount' => 0,
+                                    'Sum of Cost' => 0,
+                                    'Sum of Gross Profit' => 0,
+                                    'Sales Quantity Count' => 0,
+                                    'Avg Sales Amount' => 0,
+                                    'pos_retail_sales_transaction_facts_gross_margin_sql_sum' => 0})
       end
     end
 
@@ -175,20 +175,20 @@ describe ActiveWarehouse::Aggregate::NoAggregate do
         @values_monday = this_result.values('Southeast', 'Monday')
         @values_tuesday = this_result.values('Southeast', 'Tuesday')
 
-        @values_monday['Sum of Sales Quantity'].should == 1
+        expect(@values_monday['Sum of Sales Quantity']).to eq(1)
         @values_monday['Sum of Sales Amount'].should be_within(0.01).of(1.75)
         @values_monday['Sum of Cost'].should be_within(0.01).of(0.5)
         @values_monday['Sum of Gross Profit'].should be_within(0.01).of(1.25)
-        @values_monday['Sales Quantity Count'].should == 1
+        expect(@values_monday['Sales Quantity Count']).to eq(1)
         @values_monday['Avg Sales Amount'].should be_within(0.01).of(1.75)    
 
-        @values_tuesday.should == {'Sum of Sales Quantity' => 0,
-                                   'Sum of Sales Amount' => 0,
-                                   'Sum of Cost' => 0,
-                                   'Sum of Gross Profit' => 0,
-                                   'Sales Quantity Count' => 0,
-                                   'Avg Sales Amount' => 0,
-                                   'pos_retail_sales_transaction_facts_gross_margin_sql_sum' => 0}
+        expect(@values_tuesday).to eq({'Sum of Sales Quantity' => 0,
+                                       'Sum of Sales Amount' => 0,
+                                       'Sum of Cost' => 0,
+                                       'Sum of Gross Profit' => 0,
+                                       'Sales Quantity Count' => 0,
+                                       'Avg Sales Amount' => 0,
+                                       'pos_retail_sales_transaction_facts_gross_margin_sql_sum' => 0})
 
         filters = {'date.calendar_year' => '2001', 'store.store_region' => 'Southeast'}
 
@@ -204,11 +204,11 @@ describe ActiveWarehouse::Aggregate::NoAggregate do
         )
 
         @values_Q1 = this_result.values('South Florida', 'Q1')
-        @values_Q1['Sum of Sales Quantity'].should == 1
+        expect(@values_Q1['Sum of Sales Quantity']).to eq(1)
         @values_Q1['Sum of Sales Amount'].should be_within(0.01).of(1.75)
         @values_Q1['Sum of Cost'].should be_within(0.01).of(0.5)
         @values_Q1['Sum of Gross Profit'].should be_within(0.01).of(1.25)
-        @values_Q1['Sales Quantity Count'].should == 1
+        expect(@values_Q1['Sales Quantity Count']).to eq(1)
         @values_Q1['Avg Sales Amount'].should be_within(0.01).of(1.75)
 
       end
@@ -229,9 +229,9 @@ describe ActiveWarehouse::Aggregate::NoAggregate do
         # TODO: man, this ugly. If he were dead, David Chelimsky
         # would be turning over in his grave.
         values = this_result.values("2001", "2001").values
-        values.any? { |v| v > 0 }.should be_true
+        values.any? { |v| v > 0 }.should be true
         values = this_result.values("2002", "2002").values
-        values.any? { |v| v > 0 }.should be_true
+        values.any? { |v| v > 0 }.should be true
       end
     end
     
@@ -250,14 +250,14 @@ describe ActiveWarehouse::Aggregate::NoAggregate do
         )
 
         values = results.values('Bob Smith', '2001')
-        values.length.should == 9
-        values['Sum of Sales Quantity'].should == 1
-        values['Sum of Sales Quantity Self'].should == 1
-        values['Sum of Sales Quantity Me and Immediate children'].should == 1
+        expect(values.length).to eq(9)
+        expect(values['Sum of Sales Quantity']).to eq(1)
+        expect(values['Sum of Sales Quantity Self']).to eq(1)
+        expect(values['Sum of Sales Quantity Me and Immediate children']).to eq(1)
         values['Sum of Sales Amount'].should be_within(0.01).of(1.75)
         values['Sum of Cost'].should be_within(0.01).of(0.5)
         values['Sum of Gross Profit'].should be_within(0.01).of(1.25)
-        values['Sales Quantity Count'].should == 1
+        expect(values['Sales Quantity Count']).to eq(1)
         values['Avg Sales Amount'].should be_within(0.01).of(1.75)
       end
       
@@ -275,14 +275,14 @@ describe ActiveWarehouse::Aggregate::NoAggregate do
         )
 
         values = results.values('Bob Smith', '2002')
-        values.length.should == 9
-        values['Sum of Sales Quantity'].should == 6 #TODO: check to confirm that this result should roll up all children.
-        values['Sum of Sales Quantity Self'].should == 2
-        values['Sum of Sales Quantity Me and Immediate children'].should == 4
+        expect(values.length).to eq(9)
+        expect(values['Sum of Sales Quantity']).to eq(6) #TODO: check to confirm that this result should roll up all children.
+        expect(values['Sum of Sales Quantity Self']).to eq(2)
+        expect(values['Sum of Sales Quantity Me and Immediate children']).to eq(4)
         values['Sum of Sales Amount'].should be_within(0.01).of(8.25)
         values['Sum of Cost'].should be_within(0.01).of(7.50)
         values['Sum of Gross Profit'].should be_within(0.01).of(0.75)
-        values['Sales Quantity Count'].should == 3
+        expect(values['Sales Quantity Count']).to eq(3)
         values['Avg Sales Amount'].should be_within(0.01).of(2.75)
       end
       
@@ -310,32 +310,32 @@ describe ActiveWarehouse::Aggregate::NoAggregate do
         
         values = results.values('Bob Smith', 'Monday')
         
-        values['Sum of Sales Quantity'].should == 1
-        values['Sum of Sales Quantity Self'].should == 1
-        values['Sum of Sales Quantity Me and Immediate children'].should == 1
+        expect(values['Sum of Sales Quantity']).to eq(1)
+        expect(values['Sum of Sales Quantity Self']).to eq(1)
+        expect(values['Sum of Sales Quantity Me and Immediate children']).to eq(1)
         values['Sum of Sales Amount'].should be_within(0.01).of(1.75)
         values['Sum of Cost'].should be_within(0.01).of(0.5)
         values['Sum of Gross Profit'].should be_within(0.01).of(1.25)
 
         values = results.values('Bob Smith', 'Tuesday')
         
-        values['Sum of Sales Quantity'].should == 6
-        values['Sum of Sales Quantity Self'].should == 2
-        values['Sum of Sales Quantity Me and Immediate children'].should == 4
+        expect(values['Sum of Sales Quantity']).to eq(6)
+        expect(values['Sum of Sales Quantity Self']).to eq(2)
+        expect(values['Sum of Sales Quantity Me and Immediate children']).to eq(4)
         values['Sum of Sales Amount'].should be_within(0.01).of(8.25)
         values['Sum of Cost'].should be_within(0.01).of(7.50)
         values['Sum of Gross Profit'].should be_within(0.01).of(0.75)
-        values['Sales Quantity Count'].should == 3
+        expect(values['Sales Quantity Count']).to eq(3)
         values['Avg Sales Amount'].should be_within(0.01).of(2.75)
 
         values = results.values('Bob Smith', 'Wednesday')
-        values['Sum of Sales Quantity'].should == 0
-        values['Sum of Sales Quantity Self'].should == 0
-        values['Sum of Sales Quantity Me and Immediate children'].should == 0
+        expect(values['Sum of Sales Quantity']).to eq(0)
+        expect(values['Sum of Sales Quantity Self']).to eq(0)
+        expect(values['Sum of Sales Quantity Me and Immediate children']).to eq(0)
         values['Sum of Sales Amount'].should be_within(0.01).of(0)
         values['Sum of Cost'].should be_within(0.01).of(0)
         values['Sum of Gross Profit'].should be_within(0.01).of(0)
-        values['Sales Quantity Count'].should == 0
+        expect(values['Sales Quantity Count']).to eq(0)
         values['Avg Sales Amount'].should be_within(0.01).of(0)
       
         filters = {'date.calendar_year' => '2002'}
@@ -352,23 +352,23 @@ describe ActiveWarehouse::Aggregate::NoAggregate do
         )
         
         values = results.values('Jane Doe', 'Q1')
-        values['Sum of Sales Quantity'] == 4
-        values['Sum of Sales Quantity Self'].should == 2
-        values['Sum of Sales Quantity Me and Immediate children'].should == 4
+        expect(values['Sum of Sales Quantity']).to be(4)
+        expect(values['Sum of Sales Quantity Self']).to be(2)
+        expect(values['Sum of Sales Quantity Me and Immediate children']).to be(4)
         values['Sum of Sales Amount'].should be_within(0.01).of(5.50)
         values['Sum of Cost'].should be_within(0.01).of(5.00)
         values['Sum of Gross Profit'].should be_within(0.01).of(0.50)
-        values['Sales Quantity Count'].should == 2
+        expect(values['Sales Quantity Count']).to be(2)
         values['Avg Sales Amount'].should be_within(0.01).of(2.75)
         
         values = results.values('Jimmy Dean', 'Q1')
-        values['Sum of Sales Quantity'] == 0
-        values['Sum of Sales Quantity Self'].should == 0
-        values['Sum of Sales Quantity Me and Immediate children'].should == 0
+        expect(values['Sum of Sales Quantity']).to be(0)
+        expect(values['Sum of Sales Quantity Self']).to be(0)
+        expect(values['Sum of Sales Quantity Me and Immediate children']).to be(0)
         values['Sum of Sales Amount'].should be_within(0.01).of(0)
         values['Sum of Cost'].should be_within(0.01).of(0)
         values['Sum of Gross Profit'].should be_within(0.01).of(0)
-        values['Sales Quantity Count'].should == 0
+        expect(values['Sales Quantity Count']).to be(0)
         values['Avg Sales Amount'].should be_within(0.01).of(0)
     
         results = agg.query(
@@ -384,13 +384,13 @@ describe ActiveWarehouse::Aggregate::NoAggregate do
         
         values = results.values('Jimmy Dean', 'Q1')    
         
-        values['Sum of Sales Quantity'].should == 2
-        values['Sum of Sales Quantity Self'].should == 2
-        values['Sum of Sales Quantity Me and Immediate children'].should == 2
+        expect(values['Sum of Sales Quantity']).to eq(2)
+        expect(values['Sum of Sales Quantity Self']).to eq(2)
+        expect(values['Sum of Sales Quantity Me and Immediate children']).to eq(2)
         values['Sum of Sales Amount'].should be_within(0.01).of(2.75)
         values['Sum of Cost'].should be_within(0.01).of(2.50)
         values['Sum of Gross Profit'].should be_within(0.01).of(0.25)
-        values['Sales Quantity Count'].should == 1
+        expect(values['Sales Quantity Count']).to eq(1)
         values['Avg Sales Amount'].should be_within(0.01).of(2.75)
       end
     end
@@ -525,27 +525,27 @@ describe ActiveWarehouse::Aggregate::NoAggregate do
         )
         
         values = results.values('Salesperson A', '2006')
-        values.length.should == 2
-        values['Num Sales'].should == 3
+        expect(values.length).to eq(2)
+        expect(values['Num Sales']).to eq(3)
         
         values = results.values('Salesperson B', '2006')
-        values['Num Sales'].should == 2
+        expect(values['Num Sales']).to eq(2)
 
         values = results.values('Salesperson C', '2006')
-        values['Num Sales'].should == 1
+        expect(values['Num Sales']).to eq(1)
 
         values = results.values('Salesperson A', '2007')
-        values.length.should == 2
-        values['Num Sales'].should == 3
+        expect(values.length).to eq(2)
+        expect(values['Num Sales']).to eq(3)
         
         values = results.values('Salesperson B', '2007')
-        values['Num Sales'].should == 0
+        expect(values['Num Sales']).to eq(0)
         
         values = results.values('Salesperson C', '2007')
-        values['Num Sales'].should == 1
+        expect(values['Num Sales']).to eq(1)
 
         values = results.values('Salesperson D', '2007')
-        values['Num Sales'].should == 2
+        expect(values['Num Sales']).to eq(2)
          
         results = agg.query(
           :column_dimension_name => :product, 
@@ -555,17 +555,17 @@ describe ActiveWarehouse::Aggregate::NoAggregate do
         )
         
         values = results.values('Salesperson A', 'Delicious Brands')
-        values.length.should == 2
-        values['salesperson_sales_facts_cost_sum'].should == 100
-        values['Num Sales'].should == 5
+        expect(values.length).to eq(2)
+        expect(values['salesperson_sales_facts_cost_sum']).to eq(100)
+        expect(values['Num Sales']).to eq(5)
 
         values = results.values('Salesperson B', 'Delicious Brands')
-        values['salesperson_sales_facts_cost_sum'].should == 40
-        values['Num Sales'].should == 2
+        expect(values['salesperson_sales_facts_cost_sum']).to eq(40)
+        expect(values['Num Sales']).to eq(2)
 
         values = results.values('Salesperson A', 'Yum Brands')
-        values['salesperson_sales_facts_cost_sum'].should == 20
-        values['Num Sales'].should == 1
+        expect(values['salesperson_sales_facts_cost_sum']).to eq(20)
+        expect(values['Num Sales']).to eq(1)
       end
     end
     
@@ -616,27 +616,27 @@ describe ActiveWarehouse::Aggregate::NoAggregate do
         )
         
         values = results.values('Wholesome', '2006')
-        values['Num Sales'].should == 1
+        expect(values['Num Sales']).to eq(1)
         values['daily_sales_facts_cost_sum'].should be_nil
         
         values = results.values('Wholesome', '2007')    
-        values['Num Sales'].should == 3
+        expect(values['Num Sales']).to eq(3)
         values['daily_sales_facts_cost_sum'].should be_nil
         
         values = results.values('Delicious Brands', '2006')    
-        values['Num Sales'].should == 1
+        expect(values['Num Sales']).to eq(1)
         values['daily_sales_facts_cost_sum'].should be_nil
          
         values = results.values('Delicious Brands', '2007')    
-        values['Num Sales'].should == 1
+        expect(values['Num Sales']).to eq(1)
         values['daily_sales_facts_cost_sum'].should be_nil
         
         values = results.values('Yum Brands', '2006')    
-        values['Num Sales'].should == 1
+        expect(values['Num Sales']).to eq(1)
         values['daily_sales_facts_cost_sum'].should be_nil
                 
         values = results.values('Yum Brands', '2007')    
-        values['Num Sales'].should == 0
+        expect(values['Num Sales']).to eq(0)
         values['daily_sales_facts_cost_sum'].should be_nil
         
         # use the dimensions that don't have has_and_belongs_to_many relationship
@@ -649,20 +649,20 @@ describe ActiveWarehouse::Aggregate::NoAggregate do
         )
 
         values = results.values('Southeast', '2006')
-        values['Num Sales'].should == 2
-        values['daily_sales_facts_cost_sum'].should == 40
+        expect(values['Num Sales']).to eq(2)
+        expect(values['daily_sales_facts_cost_sum']).to eq(40)
 
         values = results.values('Southeast', '2007')
-        values['Num Sales'].should == 1
-        values['daily_sales_facts_cost_sum'].should == 20
+        expect(values['Num Sales']).to eq(1)
+        expect(values['daily_sales_facts_cost_sum']).to eq(20)
 
         values = results.values('Northeast', '2006')
-        values['Num Sales'].should == 0
-        values['daily_sales_facts_cost_sum'].should == 0
+        expect(values['Num Sales']).to eq(0)
+        expect(values['daily_sales_facts_cost_sum']).to eq(0)
 
         values = results.values('Northeast', '2007')
-        values['Num Sales'].should == 2
-        values['daily_sales_facts_cost_sum'].should == 40
+        expect(values['Num Sales']).to eq(2)
+        expect(values['daily_sales_facts_cost_sum']).to eq(40)
       end
     end
   end

@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency('guard-test')
   s.add_development_dependency('guard-rspec')
   s.add_development_dependency('sqlite3')
-  s.add_development_dependency('rspec', '>=2.8.1')
+  s.add_development_dependency('rspec', '>=3.0.0')
   s.add_development_dependency('factory_girl_rails', '>=3.3.0')
   s.add_development_dependency('database_cleaner', '>=0.8.0')
 

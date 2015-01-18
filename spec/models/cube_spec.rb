@@ -139,8 +139,8 @@ describe ActiveWarehouse::Cube do
     end
     
     it "returns a value for each aggregate field" do
-      @values_2001.should have(7).items
-      @values_2002.should have(7).items
+      expect(@values_2001.count).to eq(7)
+      expect(@values_2002.count).to eq(7)
     end
     
     it "returns correct results for a cube cell with one record" do
@@ -186,8 +186,8 @@ describe ActiveWarehouse::Cube do
     @values_2002 = this_result.values('Southeast', '2002')
     @values_2003 = this_result.values('Southeast', '2003')
     
-    @values_2001.should have(7).items # the 7th item is the calculated_in_sql_field
-    @values_2002.should have(7).items
+    expect(@values_2001.count).to eq(7)
+    expect(@values_2002.count).to eq(7)
     
     @values_2001['Sum of Sales Quantity'].should == 1
     @values_2001['Sum of Sales Amount'].should be_within(0.01).of(1.75)
@@ -288,9 +288,9 @@ describe ActiveWarehouse::Cube do
     # TODO: man, this ugly. If he were dead, David Chelimsky
     # would be turning over in his grave.
     values = this_result.values("2001", "2001").values
-    values.any? { |v| v > 0 }.should be_true
+    values.any? { |v| v > 0 }.should be true
     values = this_result.values("2002", "2002").values
-    values.any? { |v| v > 0 }.should be_true
+    values.any? { |v| v > 0 }.should be true
   end
   
   end
@@ -305,12 +305,12 @@ describe ActiveWarehouse::Cube do
   describe "pivot_on_hierarchical_dimension?" do
     context "when the cube subclass does not pivot on a hierarchical dimension" do
       it "returns false" do
-        RegionalSalesCube.pivot_on_hierarchical_dimension?.should be_false
+        RegionalSalesCube.pivot_on_hierarchical_dimension?.should be false
       end
     end
     context "when the cube subclass does pivot on a hierarchical dimension" do
       it "returns true" do
-        CustomerSalesCube.pivot_on_hierarchical_dimension?.should be_true
+        CustomerSalesCube.pivot_on_hierarchical_dimension?.should be true
       end
     end
   end
@@ -318,23 +318,23 @@ describe ActiveWarehouse::Cube do
   describe "#aggregate_fields" do
     context "when cube doesn't pivot on hierarchical dimension" do
       it "does not include fields related to hierarchical dimensions" do
-        RegionalSalesCube.aggregate_fields.should have(6).items
+        expect(RegionalSalesCube.aggregate_fields.count).to eq(6)
       end
     end
     context "when cube does pivot on hierarchical dimension" do
       it "includes fields related to the hierarchical dimension(s)" do
-        CustomerSalesCube.aggregate_fields.should have(8).items
+        expect(CustomerSalesCube.aggregate_fields.count).to eq(8)
       end
     end
     context "when cube includes has_and_belongs_to_many_dimensions dimensions" do
       context "and no arguments are passed" do
         it "includes all the aggregate fields" do
-          DailySalesCube.aggregate_fields.should have(2).items
+          expect(DailySalesCube.aggregate_fields.count).to eq(2)
         end
       end
       context "and an array of dimensions are passed" do
         it "excludes fields that are not appropriate for those dimensions" do
-          DailySalesCube.aggregate_fields([:date, :product]).should have(1).items
+          expect(DailySalesCube.aggregate_fields([:date, :product]).count).to eq(1)
         end
       end
     end

@@ -151,7 +151,7 @@ describe ActiveWarehouse::Dimension do
     context "given a value for a child node that exists" do
       it "returns true" do
         root = DateDimension.available_values_tree(:cy)
-        root.has_child?('2002').should be_true
+        root.has_child?('2002').should be true
       end
     end
   end

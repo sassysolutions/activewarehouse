@@ -32,10 +32,10 @@ describe ActiveWarehouse::SlowlyChangingDimension do
   
   describe "#find" do
     it "returns a result scoped to all effective versions" do
-      ProductDimension.find(:all).length.should == 2
+      expect(ProductDimension.all.length).to eq(2)
     end
     it "returns nil if only older versions meet the query criteria" do
-      ProductDimension.find_by_id(@old_product.id).should be_nil
+      ProductDimension.find_by(id: @old_product.id).should be_nil
     end 
   end
   

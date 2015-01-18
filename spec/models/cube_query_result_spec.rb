@@ -38,13 +38,13 @@ describe ActiveWarehouse::CubeQueryResult do
   describe "#has_row_values" do
     context "when it is passed a string for which there is a row value" do
       it "returns true" do
-        @cqr.has_row_values?('a').should be_true
+        @cqr.has_row_values?('a').should be true
       end
     end
     
     context "when it is passed a string for which there is not a row value" do
       it "returns false" do
-        @cqr.has_row_values?('b').should be_false
+        @cqr.has_row_values?('b').should be false
       end
     end
   end

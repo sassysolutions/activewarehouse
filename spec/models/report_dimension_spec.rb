@@ -62,7 +62,7 @@ describe ActiveWarehouse::Report::Dimension, ".query_filters" do
   end
 
 	it "should return a hash of dimension columns included in the params" do
-		@dimension.query_filters.should have(2).items
+		expect(@dimension.query_filters.count).to be == 2
 	end
 	
 	it "should contain the dimension_name.year param" do
@@ -79,8 +79,8 @@ describe ActiveWarehouse::Report::Dimension, ".values" do
 	
   it "should return a list of values from the dimension's current level"  do
 		@dimension = ActiveWarehouse::Report::Dimension.column(@report)	
-		@dimension.should_receive(:available_values).any_number_of_times.and_return(@all_values)
-		@dimension.should have(4).values
+		expect(@dimension).to receive(:available_values).and_return("Jan","Feb","Mar","Apr")
+		expect(@dimension.values.count).to eq(4)
 		@dimension.values.should include("Jan")
  	end
 
@@ -88,8 +88,8 @@ describe ActiveWarehouse::Report::Dimension, ".values" do
 		filters = {:month => ["Jan", "Feb"]}
 		@report.should_receive(:column_filters).and_return(filters)
 		@dimension = ActiveWarehouse::Report::Dimension.column(@report)	
-		@dimension.should_receive(:available_values).any_number_of_times.and_return(@all_values)
-		@dimension.should have(2).values
+		expect(@dimension).to receive(:available_values).and_return("Jan","Feb")
+		expect(@dimension.values.count).to eq(2)
 		@dimension.values.should include("Jan")	
 		@dimension.values.should_not include("Mar")	
   	
@@ -106,9 +106,9 @@ describe ActiveWarehouse::Report::Dimension, ".ancestors" do
   it "should return an array of string values for the current level's parents" do
 		params = {:ancestors => {"year" => "2006", "month" => "Jan", "day" => "uh-oh"}, :stage => 2}
     @dimension = ActiveWarehouse::Report::Dimension.column(@report, params)	
-		@dimension.should have(2).ancestors
-		@dimension.ancestors.should include("Jan")
-		@dimension.ancestors.should_not include("uh-oh")
+		expect(@dimension.ancestors.count).to eq(2)
+		expect(@dimension.ancestors).to include("Jan")
+		expect(@dimension.ancestors).not_to include("uh-oh")
   end
 end
 

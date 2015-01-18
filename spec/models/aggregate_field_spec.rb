@@ -16,14 +16,14 @@ describe ActiveWarehouse::AggregateField do
   describe "#is_semiadditive?" do
     context "given a field that is not semi-additive" do
       it "returns false" do
-        @field.is_semiadditive?.should be_false
+        @field.is_semiadditive?.should be false
       end
     end
     context "given a field that is semi-additive" do
       it "returns true" do
         @field = ActiveWarehouse::AggregateField.new(StoreInventorySnapshotFact,
             StoreInventorySnapshotFact.columns_hash["quantity_sold"], strategy: :sum, semiadditive: :date)
-        @field.is_semiadditive?.should be_true
+        @field.is_semiadditive?.should be true
       end
     end
   end

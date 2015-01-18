@@ -8,7 +8,7 @@ describe "HierarchicalDimension" do
     @jimmy_dean = FactoryGirl.create(:customer, :customer_name => "Jimmy Dean")
     
     @root_customer = FactoryGirl.create(:root_customer, :parent_id => @bob_smith.id,
-                                                      :child_id => @bob_smith.id)
+                                                        :child_id => @bob_smith.id)
                                                       
     @child_customer = FactoryGirl.create(:parent_bridge_record, :parent_id => @jane_doe.id,
                                                                 :child_id => @jane_doe.id,
@@ -41,13 +41,13 @@ describe "HierarchicalDimension" do
   
   describe "#bridge_class" do
     it "returns the bridge class for a given dimension class" do
-      CustomerDimension.bridge_class.should == CustomerHierarchyBridge
+      expect(CustomerDimension.bridge_class).to be(CustomerHierarchyBridge)
     end
   end
   
   describe "#bridge_class_name" do  
     it "returns the bridge class name as a string for a given dimension class" do
-      CustomerDimension.bridge_class_name.should == "CustomerHierarchyBridge"
+      expect(CustomerDimension.bridge_class_name).to eq("CustomerHierarchyBridge")
     end
   end
 
@@ -60,22 +60,22 @@ describe "HierarchicalDimension" do
     
     context "when called on a record with a parent" do
       it "returns the record's parent object" do
-        @jane_doe.parent.should == @bob_smith
+        @jane_doe.parent.should eq(@bob_smith)
       end
     end
   end
 
   describe "#children" do
     it "returns something" do
-      @bob_smith.children.should_not be_nil
+      expect(@bob_smith.children).to_not be_nil
     end
     
     it "returns an array of the record's children" do
-      @bob_smith.children.should include(@jane_doe)
+      expect(@bob_smith.children).to include(@jane_doe)
     end
     
     it "does not include grandchildren in the returned array" do
-      @bob_smith.children.should_not include(@jimmy_dean)
+      expect(@bob_smith.children).to_not include(@jimmy_dean)
     end
   end
   
