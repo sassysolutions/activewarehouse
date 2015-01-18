@@ -215,9 +215,11 @@ module ActiveWarehouse #:nodoc
 
         conditions = [conditions_parts.join(' AND ')] + conditions_values unless conditions_parts.empty?
 
-        options = {:select => "distinct #{order.to_s == level.to_s ? '' : order.to_s+','} #{level}", :order => order, :conditions => conditions}
         values = []
-        find(:all, options).each do |dim|
+        select("distinct #{order.to_s == level.to_s ? '' : order.to_s+','} #{level}")
+          .order(order)
+          .where(conditions)
+          .each do |dim|
           value = dim.send(level_method)
           values << dim.send(level_method) unless values.include?(value)
         end
@@ -271,7 +273,7 @@ module ActiveWarehouse #:nodoc
 
         options[:conditions] = conditions unless conditions.nil?
 
-        find(:all, options).map do |dim|
+        where(options[:conditions]).map do |dim|
           child_level_methods.map{|m| dim.send(m)}.join(' ')
         end.uniq
       end
@@ -287,14 +289,16 @@ module ActiveWarehouse #:nodoc
           level_list = levels.collect{|level| connection.quote_column_name(level) }.join(',')
           order = "max(#{self.order})" || level_list
           select_clause = self.order ? "#{level_list}, #{order}" : level_list
-          find(:all, :select => select_clause, :group => level_list, :order => order).each do |dim|
-            parent_node = root
-            levels.each do |level|
-              node_value = dim.send(level)
-              child_node = parent_node.optionally_add_child(node_value, level)
-              parent_node = child_node
+          select(select_clause)
+            .group(level_list)
+            .order(order).each do |dim|
+              parent_node = root
+              levels.each do |level|
+                node_value = dim.send(level)
+                child_node = parent_node.optionally_add_child(node_value, level)
+                parent_node = child_node
+              end
             end
-          end
           value_tree_cache[hierarchy_name] = root
         end
         root

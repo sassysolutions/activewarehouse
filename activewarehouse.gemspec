@@ -17,12 +17,12 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = ">= 1.3.6"
 
-  s.add_runtime_dependency('rake',                '>= 0.8.3')
-  s.add_runtime_dependency('rails',               '>= 3.2.0')
-  s.add_runtime_dependency('activesupport',       '>= 3.2.0')
-  s.add_runtime_dependency('activerecord',        '>= 3.2.0')
-  s.add_runtime_dependency('actionpack',          '>= 3.2.0')
-  s.add_runtime_dependency('adapter_extensions',  '> 0.9.5')
+  s.add_runtime_dependency('rake',                '>= 10.0.0')
+  s.add_runtime_dependency('rails',               '>= 4.0.0')
+  s.add_runtime_dependency('activesupport',       '>= 4.0.0')
+  s.add_runtime_dependency('activerecord',        '>= 4.0.0')
+  s.add_runtime_dependency('actionpack',          '>= 4.0.0')
+  s.add_runtime_dependency('adapter_extensions',  '>= 1.0.0')
   s.add_runtime_dependency('fastercsv',           '>= 1.1.0')
   s.add_runtime_dependency('rails_sql_views',     '>= 0.1.0')
 

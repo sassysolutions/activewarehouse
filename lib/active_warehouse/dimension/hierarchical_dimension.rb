@@ -80,17 +80,15 @@ module ActiveWarehouse #:nodoc
     module InstanceMethods #:nodoc
       # Get the parent for this node
       def parent
-        self.class.find(:first, 
-                        :select => "a.*",
-                        :joins => "a join #{self.class.bridge_class.table_name} b on a.id = b.#{self.class.child_foreign_key}", 
+        self.class.first(:select => "a.*",
+                         :joins => "a join #{self.class.bridge_class.table_name} b on a.id = b.#{self.class.child_foreign_key}",
         :conditions => ["b.#{self.class.parent_foreign_key} = ? and b.#{self.class.levels_from_parent} = 1", self.id])
       end
 
       # Get the children for this node
       def children
-        self.class.find(:all, 
-                        :select => "a.*",
-                        :joins => "a join #{self.class.bridge_class.table_name} b on a.id = b.#{self.class.parent_foreign_key}", 
+        self.class.all(:select => "a.*",
+                       :joins => "a join #{self.class.bridge_class.table_name} b on a.id = b.#{self.class.parent_foreign_key}",
         :conditions => ["b.#{self.class.child_foreign_key} = ? and b.#{self.class.levels_from_parent} = 1", self.id])
       end
     end

@@ -78,10 +78,9 @@ module ActiveWarehouse #:nodoc:
       end
       
       def versions
-        self.class.find(:all,
-            :conditions => ["#{self.class.identifier} = ?", self.send(identifier)],
-            :with_older => true,
-            :order => "#{self.class.effective_date_attribute} asc")
+        self.class.where("#{self.class.identifier} = ?", self.send(identifier))
+                  .order("#{self.class.effective_date_attribute} asc")
+                      # :with_older => true,
       end
 
       module ClassMethods
