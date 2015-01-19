@@ -34,8 +34,8 @@ module ActiveWarehouse #:nodoc
         options[:class_name] ||= "#{association_id}_dimension".classify
         options[:foreign_key] ||= "#{association_id}_id"
         slowly_changing_over = options.delete(:slowly_changing)
-        belongs_to association_id, options
-        relationship = reflections[association_id.to_s]
+        belongs_to association_id.to_sym, options
+        relationship = reflections[association_id.to_sym] || reflections[association_id.to_s]
 
         if slowly_changing_over
           if !dimensions.include?(slowly_changing_over.to_sym)
@@ -57,7 +57,7 @@ module ActiveWarehouse #:nodoc
         name = self.name.demodulize.chomp('Fact').underscore
         options[:join_table] ||= "#{name}_#{association_id}_bridge"
         has_and_belongs_to_many association_id, options
-        relationship = reflections[association_id.to_s]
+        relationship = reflections[association_id.to_sym] || reflections[association_id.to_s]
         dimension_relationships[association_id.to_sym] = relationship
       end
 
