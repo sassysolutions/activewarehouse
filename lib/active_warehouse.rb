@@ -41,7 +41,6 @@ require 'fileutils'
 require 'adapter_extensions'
 
 require 'active_warehouse/railtie'
-require 'active_warehouse/ordered_hash'
 require 'active_warehouse/field'
 require 'active_warehouse/aggregate_field'
 require 'active_warehouse/calculated_field'

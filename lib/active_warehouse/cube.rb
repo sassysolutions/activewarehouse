@@ -22,7 +22,7 @@ module ActiveWarehouse
       # on a PurchaseFact) then you *must* declare the <code>reports_on</code>
       # first.
       def pivots_on(*dimension_list)
-        @dimensions_hierarchies = OrderedHash.new
+        @dimensions_hierarchies = ActiveSupport::OrderedHash.new
         @dimensions = []
         dimension_list.each do |dimension|
           case dimension
@@ -71,7 +71,7 @@ module ActiveWarehouse
       # will be included in the cube
       def dimensions_hierarchies
         if @dimensions_hierarchies.nil?
-          @dimensions_hierarchies = OrderedHash.new
+          @dimensions_hierarchies = ActiveSupport::OrderedHash.new
           dimensions.each do |dimension|
             @dimensions_hierarchies[dimension] = fact_class.dimension_class(dimension).hierarchies.first
           end

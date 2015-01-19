@@ -38,13 +38,13 @@ module ActiveWarehouse #:nodoc
         relationship = reflections[association_id.to_s]
 
         if slowly_changing_over
-          if !dimensions.include?(slowly_changing_over)
+          if !dimensions.include?(slowly_changing_over.to_sym)
             raise "No dimension specified with name '#{slowly_changing_over}' in fact '#{self.name}', specify it first with dimension macro"
           end
-          relationship.slowly_changing_over = dimension_relationships[slowly_changing_over]
+          relationship.slowly_changing_over = dimension_relationships[slowly_changing_over.to_sym]
         end
 
-        dimension_relationships[association_id] = relationship
+        dimension_relationships[association_id.to_sym] = relationship
       end
 
       # Acts as an alias for +has_and_belongs_to_many+, yet marks this relationship
@@ -58,28 +58,28 @@ module ActiveWarehouse #:nodoc
         options[:join_table] ||= "#{name}_#{association_id}_bridge"
         has_and_belongs_to_many association_id, options
         relationship = reflections[association_id.to_s]
-        dimension_relationships[association_id] = relationship
+        dimension_relationships[association_id.to_sym] = relationship
       end
 
       # returns true for the dimension relationship of +belongs_to+
       def belongs_to_relationship?(dimension_name)
-        dimension_relationships[dimension_name] and dimension_relationships[dimension_name].macro == :belongs_to  
+        dimension_relationships[dimension_name.to_sym] and dimension_relationships[dimension_name.to_sym].macro == :belongs_to
       end
 
       # returns true for the dimension relationship of +has_and_belongs_to_many+
       def has_and_belongs_to_many_relationship?(dimension_name)
-        dimension_relationships[dimension_name] and dimension_relationships[dimension_name].macro == :has_and_belongs_to_many
+        dimension_relationships[dimension_name.to_sym] and dimension_relationships[dimension_name.to_sym].macro == :has_and_belongs_to_many
       end
 
       # returns the AssociationReflection for the specified dimension name
       def dimension_relationship(dimension_name)
-        dimension_relationships[dimension_name]
+        dimension_relationships[dimension_name.to_sym]
       end
 
       # returns the dimension name (as specified in the dimension macro)
       # which the specified +dimension_name+ is slowly changing over
       def slowly_changes_over_name(dimension_name)
-        dimension_relationships[dimension_name].slowly_changing_over.name
+        dimension_relationships[dimension_name.to_sym].slowly_changing_over.name
       end
 
       # returns the Class for the dimension which the specified
@@ -106,7 +106,7 @@ module ActiveWarehouse #:nodoc
       # Returns the dimension class, given a dimension name from this fact.
       # Must appear as a registered dimension relationship.
       def dimension_class(dimension_name)
-        dimension_relationships[dimension_name].class_name.constantize
+        dimension_relationships[dimension_name.to_sym].class_name.constantize
       end
 
       # Get the time when the fact source file was last modified
@@ -141,7 +141,7 @@ module ActiveWarehouse #:nodoc
       # Return the foreign key that the fact uses to relate back to the specified 
       # dimension. This is found using the dimension_relationships hash.
       def foreign_key_for(dimension_name)
-        dimension_relationships[dimension_name].foreign_key
+        dimension_relationships[dimension_name.to_sym].foreign_key
       end
 
       # Define an aggregate. Also aliased from aggregate()
@@ -240,7 +240,7 @@ module ActiveWarehouse #:nodoc
       end
 
       def dimension_relationships
-        @dimension_relationships ||= OrderedHash.new
+        @dimension_relationships ||= ActiveSupport::OrderedHash.new
       end
 
       def prejoin_fact

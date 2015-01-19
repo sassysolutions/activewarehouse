@@ -36,9 +36,9 @@ module ActiveWarehouse #:nodoc:
 
         used_dimensions = Set.new
         used_dimensions.merge([column_dimension_name, row_dimension_name])
-        row_dim_reflection = fact_class.dimension_relationships[row_dimension_name].dependent_dimension_reflections
+        row_dim_reflection = fact_class.dimension_relationships[row_dimension_name.to_sym].dependent_dimension_reflections
         used_dimensions.merge(row_dim_reflection.collect{|d| d.name})
-        col_dim_reflection = fact_class.dimension_relationships[column_dimension_name].dependent_dimension_reflections
+        col_dim_reflection = fact_class.dimension_relationships[column_dimension_name.to_sym].dependent_dimension_reflections
         used_dimensions.merge(col_dim_reflection.collect{|d| d.name})
         filters.each do |k,v|
           used_dimensions << k.split('.')[0]

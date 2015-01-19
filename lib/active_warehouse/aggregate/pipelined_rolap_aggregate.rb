@@ -538,7 +538,7 @@ module ActiveWarehouse #:nodoc
 
       def aggregate_dimension_fields
         # puts "aggregate_dimension_fields"
-        dim_cols = OrderedHash.new
+        dim_cols = ActiveSupport::OrderedHash.new
 
         cube_class.dimensions_hierarchies.each do |dimension_name, hierarchy_name|
           dimension_class = fact_class.dimension_class(dimension_name)
