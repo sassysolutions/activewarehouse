@@ -6,16 +6,7 @@ def declare_gems(rails_version)
 
   gem 'rails', rails_version
 
-  if rails_version < '3.1'
-    gem 'mysql2', '< 0.3'
-  else
-    # use our own fork for bulk load support until issue fixed:
-    # https://github.com/brianmario/mysql2/pull/242
-    gem 'mysql2', :git => 'https://github.com/activewarehouse/mysql2.git'
-  end
-
-  gem 'mysql'
-
+  gem 'mysql2'
   gem 'pg'
   gem 'rspec'
   gem 'factory_girl_rails'
@@ -23,7 +14,7 @@ def declare_gems(rails_version)
   gem 'awesome_print'
   gem 'rake'
   gem 'flexdouble'
-  gem 'shoulda', '3.0.1'
+  gem 'shoulda', '~> 3.5.0'
   gem 'sqlite3'
   gem 'rspec'
   gem 'database_cleaner'

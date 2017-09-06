@@ -5,7 +5,7 @@ describe ActiveWarehouse::View::TableView, ".new" do
   before(:each) do
     @report = stub_report
     @params = {"c_year" => "2006", "c_month" => "Jan", "crap_param" => "Crap", :cstage => 2,
-      "r_year" => "2006", "r_month" => "Jan", "crap_param" => "Crap", :rstage => 2}
+      "r_year" => "2006", "r_month" => "Jan", :rstage => 2}
     @table_view = ActiveWarehouse::View::TableView.new(@report, @params)
   end	
 

@@ -1,8 +1,8 @@
 language: ruby
 gemfile:
-   - test/config/gemfiles/Gemfile.rails-3.2.x
+   - test/config/gemfiles/Gemfile.rails-5.1.x
 rvm:
-  - 1.9.3
+  - 2.3.3
 env:
   - DB=sqlite3
   - DB=mysql

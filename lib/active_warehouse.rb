@@ -1,5 +1,5 @@
 # This source file requires all of the necessary gems and source files for ActiveWarehouse. If you
-# load this source file all of the other required files and gems will also be brought into the 
+# load this source file all of the other required files and gems will also be brought into the
 # runtime.
 
 #--
@@ -38,7 +38,6 @@ require 'action_view'
 
 require 'fastercsv'
 require 'fileutils'
-require 'adapter_extensions'
 
 require 'active_warehouse/railtie'
 require 'active_warehouse/field'

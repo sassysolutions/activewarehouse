@@ -22,7 +22,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('activesupport',       '>= 4.0.0')
   s.add_runtime_dependency('activerecord',        '>= 4.0.0')
   s.add_runtime_dependency('actionpack',          '>= 4.0.0')
-  s.add_runtime_dependency('adapter_extensions',  '>= 1.0.0')
   s.add_runtime_dependency('fastercsv',           '>= 1.1.0')
   s.add_runtime_dependency('rails_sql_views',     '>= 0.1.0')
 
